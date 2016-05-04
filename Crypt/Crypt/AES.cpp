@@ -9,7 +9,6 @@ AES::~AES() {
 }
 
 void AES::encryptECB(uint8_t * content, int length, uint8_t * key) {
-	uint8_t *tmp = new uint8_t[length % 4 ? length : length];
 	if (length % 16 != 0) {
 		for (int i = length; i < length + 16 - length % 16; ++i) {
 			content[i] = 0x00;
@@ -24,6 +23,14 @@ void AES::decryptECB(uint8_t * content, int length, uint8_t * key) {
 	for (int i = 0; i < length; i += 16) {
 		decrypt16(content + i, key);
 	}
+}
+
+void AES::encryptCBC(uint8_t * content, int length, uint8_t * key, uint8_t * IV) {
+
+}
+
+void AES::decryptCBC(uint8_t * content, int length, uint8_t * key) {
+
 }
 
 uint8_t AES::multi(uint8_t a, uint8_t b) {

@@ -1,3 +1,10 @@
-用C++实现的一个AES加密类，在\Crypt\Crypt目录下
-AES.h 和 AES.cpp
-本来还想用base64进行编码的，但是还没来得及做
+## Crypt是VS2015 Project，实现了各种加密方法
+### AES加密类
+    用C++实现的一个AES加密类，源代码在\Crypt\Crypt目录下的AES.h 和 AES.cpp
+    AES加密多个states有4种方案，分别为：
+    -
+    -
+    -
+    -
+### base64
+只实现了编码，解码还没写

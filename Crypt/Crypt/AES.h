@@ -86,12 +86,25 @@ private:
 	//Make round key
 	void keySchedule(uint8_t *key);
 	void show16(uint8_t *state);
+	
+	//State decrypt
+	void decrypt16(uint8_t *state, uint8_t *key);
 public:
 	AES();
 	~AES();
 	//State encrypt
 	void encrypt16(uint8_t *state, uint8_t *key);
-	//State decrypt
-	void decrypt16(uint8_t *state, uint8_t *key);
+	//ECB模式（电子密码本模式：Electronic codebook）下的加解密
+	void encryptECB(uint8_t *content, int length, uint8_t *key);
+	void decryptECB(uint8_t *content, int length, uint8_t *key);
+	//CBC模式（密码分组链接：Cipher-block chaining）下的加解密
+	void encryptCBC(uint8_t *content, int length, uint8_t *key);
+	void decryptCBC(uint8_t *content, int length, uint8_t *key);
+	//CFB模式(密文反馈:Cipher feedback)下的加解密
+	void encryptCFB(uint8_t *content, int length, uint8_t *key);
+	void decryptCFB(uint8_t *content, int length, uint8_t *key);
+	//OFB模式（输出反馈：Output feedback）下的加解密
+	void encryptOFB(uint8_t *content, int length, uint8_t *key);
+	void decryptOFB(uint8_t *content, int length, uint8_t *key);
 };
 

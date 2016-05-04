@@ -1,3 +1,2 @@
 ﻿  AES.cpp
-  Crypt.vcxproj -> C:\Users\hcy_9\Documents\Visual Studio 2015\Projects\Crypt\Debug\Crypt.exe
-  Crypt.vcxproj -> C:\Users\hcy_9\Documents\Visual Studio 2015\Projects\Crypt\Debug\Crypt.pdb (Partial PDB)
+LINK : fatal error LNK1168: 无法打开 C:\Users\hcy_9\Documents\Visual Studio 2015\Projects\Crypt\Debug\Crypt.exe 进行写入

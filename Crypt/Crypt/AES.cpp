@@ -8,6 +8,24 @@ AES::~AES() {
 
 }
 
+void AES::encryptECB(uint8_t * content, int length, uint8_t * key) {
+	uint8_t *tmp = new uint8_t[length % 4 ? length : length];
+	if (length % 16 != 0) {
+		for (int i = length; i < length + 16 - length % 16; ++i) {
+			content[i] = 0x00;
+		}
+	}
+	for (int i = 0; i < length; i += 16) {
+		encrypt16(content + i, key);
+	}
+}
+
+void AES::decryptECB(uint8_t * content, int length, uint8_t * key) {
+	for (int i = 0; i < length; i += 16) {
+		decrypt16(content + i, key);
+	}
+}
+
 uint8_t AES::multi(uint8_t a, uint8_t b) {
 	uint8_t result = 0x00;
 	for (int i = 8; i > 0; --i) {
@@ -212,7 +230,7 @@ void AES::decrypt16(uint8_t *state, uint8_t *key) {
 	invShiftRows(state);
 	invSubBytes(state);
 	//round 9~1
-	for (int i = 9; i > 0; --i) {	
+	for (int i = 9; i > 0; --i) {
 		addRoundKey(state, roundKey[i]);
 		invMixColumns(state);
 		invShiftRows(state);

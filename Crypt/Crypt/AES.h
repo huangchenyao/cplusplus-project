@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <cstdint>
+#include <vector>
 using namespace std;
 
 class AES
@@ -67,36 +68,36 @@ private:
 
 	//Multiplication in GF(2^8)
 	uint8_t multi(uint8_t a, uint8_t b);
-	//Multiplication of matrix, matrix a is m*p, matrix b is p*n
+	//Multiplication of matrix, matrix a is m*p, matrix b is p*n, not used
 	void multiMatrix(uint8_t *a, uint8_t *b, uint8_t *result, int m, int p, int n);
 	//Replace bytes with S-box
-	void subBytes(uint8_t *state);
+	void subBytes(vector<uint8_t>::iterator &state);
 	//Replace bytes with inverse S-box
-	void invSubBytes(uint8_t *state);
+	void invSubBytes(vector<uint8_t>::iterator &state);
 	//Bytes shift
-	void shiftRows(uint8_t *state);
+	void shiftRows(vector<uint8_t>::iterator &state);
 	//Bytes inverse shift
-	void invShiftRows(uint8_t *state);
+	void invShiftRows(vector<uint8_t>::iterator &state);
 	//Mix columns
-	void mixColumns(uint8_t *state);
+	void mixColumns(vector<uint8_t>::iterator &state);
 	//Mix inverse columns
-	void invMixColumns(uint8_t *state);
+	void invMixColumns(vector<uint8_t>::iterator &state);
 	//State XOR round key
-	void addRoundKey(uint8_t *state, uint8_t *roundKey);
+	void addRoundKey(vector<uint8_t>::iterator &state, uint8_t *roundKey);
 	//Make round key
-	void keySchedule(uint8_t *key);
-	void show16(uint8_t *state);
+	void keySchedule(const vector<uint8_t> &key);
+	void show16(vector<uint8_t>::iterator &state);
 	//State encrypt
-	void encrypt16(uint8_t *state, uint8_t *key);
+	void encrypt16(vector<uint8_t>::iterator &state, const vector<uint8_t> &key);
 	//State decrypt
-	void decrypt16(uint8_t *state, uint8_t *key);
+	void decrypt16(vector<uint8_t>::iterator &state, const vector<uint8_t> &key);
 public:
 	AES();
 	~AES();
-	
+
 	//ECB模式（电子密码本模式：Electronic codebook）下的加解密
-	void encryptECB(uint8_t *content, int length, uint8_t *key);
-	void decryptECB(uint8_t *content, int length, uint8_t *key);
+	void encryptECB(vector<uint8_t> &content, int length, const vector<uint8_t> &key);
+	void decryptECB(vector<uint8_t> &content, int length, const vector<uint8_t> &key);
 	//CBC模式（密码分组链接：Cipher-block chaining）下的加解密
 	void encryptCBC(uint8_t *content, int length, uint8_t *key, uint8_t * IV);
 	void decryptCBC(uint8_t *content, int length, uint8_t *key);

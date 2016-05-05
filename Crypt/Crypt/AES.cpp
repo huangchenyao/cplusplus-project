@@ -8,20 +8,20 @@ AES::~AES() {
 
 }
 
-void AES::encryptECB(uint8_t * content, int length, uint8_t * key) {
+void AES::encryptECB(vector<uint8_t> &content, int length, const vector<uint8_t> &key) {
 	if (length % 16 != 0) {
 		for (int i = length; i < length + 16 - length % 16; ++i) {
-			content[i] = 0x00;
+			content.push_back(0x00);
 		}
 	}
-	for (int i = 0; i < length; i += 16) {
-		encrypt16(content + i, key);
+	for (auto iter = content.begin(); iter != content.end(); iter += 16) {
+		encrypt16(iter, key);
 	}
 }
 
-void AES::decryptECB(uint8_t * content, int length, uint8_t * key) {
-	for (int i = 0; i < length; i += 16) {
-		decrypt16(content + i, key);
+void AES::decryptECB(vector<uint8_t> &content, int length, const vector<uint8_t> &key) {
+	for (auto iter = content.begin(); iter != content.end(); iter += 16) {
+		decrypt16(iter, key);
 	}
 }
 
@@ -65,7 +65,7 @@ void AES::multiMatrix(uint8_t *a, uint8_t *b, uint8_t *result, int m, int p, int
 	}
 }
 
-void AES::subBytes(uint8_t *state) {
+void AES::subBytes(vector<uint8_t>::iterator &state) {
 	for (int i = 0; i < 4; ++i) {
 		for (int j = 0; j < 4; ++j) {
 			int row = (*(state + i * 4 + j) & 0xf0) >> 4;
@@ -75,7 +75,7 @@ void AES::subBytes(uint8_t *state) {
 	}
 }
 
-void AES::invSubBytes(uint8_t *state) {
+void AES::invSubBytes(vector<uint8_t>::iterator &state) {
 	for (int i = 0; i < 4; ++i) {
 		for (int j = 0; j < 4; ++j) {
 			int row = (*(state + i * 4 + j) & 0xf0) >> 4;
@@ -85,7 +85,7 @@ void AES::invSubBytes(uint8_t *state) {
 	}
 }
 
-void AES::shiftRows(uint8_t *state) {
+void AES::shiftRows(vector<uint8_t>::iterator &state) {
 	uint8_t *tmp = new uint8_t[3 * 4];
 	for (int i = 1; i < 4; ++i) {
 		for (int j = 0; j < 4; ++j) {
@@ -98,7 +98,7 @@ void AES::shiftRows(uint8_t *state) {
 	delete[] tmp;
 }
 
-void AES::invShiftRows(uint8_t *state) {
+void AES::invShiftRows(vector<uint8_t>::iterator &state) {
 	uint8_t *tmp = new uint8_t[3 * 4];
 	for (int i = 1; i < 4; ++i) {
 		for (int j = 0; j < 4; ++j) {
@@ -111,7 +111,7 @@ void AES::invShiftRows(uint8_t *state) {
 	delete[] tmp;
 }
 
-void AES::mixColumns(uint8_t *state) {
+void AES::mixColumns(vector<uint8_t>::iterator &state) {
 	uint8_t *tmp = new uint8_t[4 * 4];
 	for (int i = 0; i < 4; ++i) {
 		for (int j = 0; j < 4; ++j) {
@@ -129,7 +129,7 @@ void AES::mixColumns(uint8_t *state) {
 	delete[] tmp;
 }
 
-void AES::invMixColumns(uint8_t *state) {
+void AES::invMixColumns(vector<uint8_t>::iterator &state) {
 	uint8_t *tmp = new uint8_t[4 * 4];
 	for (int i = 0; i < 4; ++i) {
 		for (int j = 0; j < 4; ++j) {
@@ -147,7 +147,7 @@ void AES::invMixColumns(uint8_t *state) {
 	delete[] tmp;
 }
 
-void AES::addRoundKey(uint8_t *state, uint8_t *roundKey) {
+void AES::addRoundKey(vector<uint8_t>::iterator &state, uint8_t *roundKey) {
 	for (int j = 0; j < 4; ++j) {
 		for (int i = 0; i < 4; ++i) {
 			*(state + i * 4 + j) ^= *(roundKey + i * 4 + j);
@@ -155,10 +155,10 @@ void AES::addRoundKey(uint8_t *state, uint8_t *roundKey) {
 	}
 }
 
-void AES::keySchedule(uint8_t *key) {
+void AES::keySchedule(const vector<uint8_t> &key) {
 	for (int i = 0; i < 4; ++i) {
 		for (int j = 0; j < 4; ++j) {
-			roundKey[0][i * 4 + j] = *(key + i * 4 + j);
+			roundKey[0][i * 4 + j] = key[i * 4 + j];
 		}
 	}
 	for (int i = 1; i < 11; ++i) {
@@ -191,7 +191,7 @@ void AES::keySchedule(uint8_t *key) {
 	}
 }
 
-void AES::show16(uint8_t *state) {
+void AES::show16(vector<uint8_t>::iterator &state) {
 	for (int i = 0; i < 4; ++i) {
 		for (int j = 0; j < 4; ++j) {
 			cout << "0x" << hex << (int)*(state + i * 4 + j) << "\t";
@@ -201,7 +201,7 @@ void AES::show16(uint8_t *state) {
 	cout << endl;
 }
 
-void AES::encrypt16(uint8_t *state, uint8_t *key) {
+void AES::encrypt16(vector<uint8_t>::iterator &state, const vector<uint8_t> &key) {
 	keySchedule(key);
 	addRoundKey(state, roundKey[0]);
 	//round 1~9
@@ -231,7 +231,7 @@ void AES::encrypt16(uint8_t *state, uint8_t *key) {
 	show16(state);
 }
 
-void AES::decrypt16(uint8_t *state, uint8_t *key) {
+void AES::decrypt16(vector<uint8_t>::iterator &state, const vector<uint8_t> &key) {
 	//round 10
 	addRoundKey(state, roundKey[10]);
 	invShiftRows(state);

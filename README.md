@@ -1,4 +1,4 @@
-Crypt是VS2015下的Project，实现了各种加密方法
+Crypt自己写着玩的一个VS2015下的Project，实现了各种加密方法（use C++ 11）
 ====
 ##AES
 用C++实现的一个AES加密类，源代码在\Crypt\Crypt目录下的AES.h 和 AES.cpp，AES加密多个states有4种方案，分别为：  

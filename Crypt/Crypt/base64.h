@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <iostream>
+#include <vector>
 using namespace std;
 class base64
 {
@@ -14,7 +15,7 @@ private:
 public:
 	base64();
 	~base64();
-	uint8_t * encode(uint8_t *data, int length);
-	void decode(uint8_t *base64Str, int length);
+	vector<uint8_t> encode(vector<uint8_t> data, int length);
+	vector<uint8_t> decode(vector<uint8_t> base64Str, int length);
 };
 

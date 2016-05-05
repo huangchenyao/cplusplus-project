@@ -11,31 +11,31 @@ base64::~base64()
 {
 }
 
-uint8_t * base64::encode(uint8_t * data, int length) {
+vector<uint8_t> base64::encode(vector<uint8_t> data, int length) {
 	int length64 = length % 3 ? (length / 3 + 1) * 4 : length / 3 * 4;
-	uint8_t * base64Str = new uint8_t[length64];
+	vector<uint8_t> base64Str;
 	int i = 0, j = 0;
 	for (; length >= 3; length -= 3) {
-		base64Str[j++] = encodeTable[data[i++] >> 2];
-		base64Str[j++] = encodeTable[((data[i - 1] & 0x03) << 4) | (data[i++] >> 4)];
-		base64Str[j++] = encodeTable[((data[i - 1] & 0x0f) << 2) | (data[i] >> 6)];
-		base64Str[j++] = encodeTable[data[i++] & 0x3f];
+		base64Str.push_back(encodeTable[data[i++] >> 2]);
+		base64Str.push_back(encodeTable[((data[i - 1] & 0x03) << 4) | (data[i++] >> 4)]);
+		base64Str.push_back(encodeTable[((data[i - 1] & 0x0f) << 2) | (data[i] >> 6)]);
+		base64Str.push_back(encodeTable[data[i++] & 0x3f]);
 	}
 	if (2 == length) {
-		base64Str[j++] = encodeTable[data[i++] >> 2];
-		base64Str[j++] = encodeTable[((data[i - 1] & 0x03) << 4) | (data[i++] >> 4)];
-		base64Str[j++] = encodeTable[(data[i - 1] & 0x0f) << 2];
-		base64Str[j++] = '=';
+		base64Str.push_back(encodeTable[data[i++] >> 2]);
+		base64Str.push_back(encodeTable[((data[i - 1] & 0x03) << 4) | (data[i++] >> 4)]);
+		base64Str.push_back(encodeTable[(data[i - 1] & 0x0f) << 2]);
+		base64Str.push_back('=');
 	}
 	if (1 == length) {
-		base64Str[j++] = encodeTable[data[i++] >> 2];
-		base64Str[j++] = encodeTable[(data[i - 1] & 0x03) << 4];
-		base64Str[j++] = '=';
-		base64Str[j++] = '=';
+		base64Str.push_back(encodeTable[data[i++] >> 2]);
+		base64Str.push_back(encodeTable[(data[i - 1] & 0x03) << 4]);
+		base64Str.push_back('=');
+		base64Str.push_back('=');
 	}
 	return base64Str;
 }
 
-void base64::decode(uint8_t * base64Str, int length64) {
-
+vector<uint8_t> base64::decode(vector<uint8_t> base64Str, int length64) {
+	return base64Str;
 }

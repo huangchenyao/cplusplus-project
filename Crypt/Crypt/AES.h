@@ -1,3 +1,6 @@
+/*
+	算法思路来源http://www.cnblogs.com/luop/p/4334160.html与http://www.ssdfans.com/?p=238这两个网站
+*/
 #pragma once
 #include <iostream>
 #include <cstdint>
@@ -7,7 +10,7 @@ using namespace std;
 class AES
 {
 private:
-	//S-box transformation table
+	//S-box置换表
 	const uint8_t sBox[16][16] = {
 		// 0     1     2     3     4     5     6     7     8     9     a     b     c     d     e     f
 		{0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76}, // 0
@@ -27,7 +30,7 @@ private:
 		{0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf}, // e
 		{0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16}  // f
 	};
-	//Inverse S-box transformation table
+	//S-box逆置换表
 	const uint8_t invSBox[16][16] = {
 		// 0     1     2     3     4     5     6     7     8     9     a     b     c     d     e     f
 		{0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3, 0x9e, 0x81, 0xf3, 0xd7, 0xfb}, // 0
@@ -47,49 +50,50 @@ private:
 		{0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61}, // e
 		{0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d}  // f
 	};
-	//MixColumns transformation table
+	//列混淆置换表
 	const uint8_t mixCol[4][4] = {
 		{0x02, 0x03, 0x01, 0x01},
 		{0x01, 0x02, 0x03, 0x01},
 		{0x01, 0x01, 0x02, 0x03},
 		{0x03, 0x01, 0x01, 0x02}
 	};
-	//Inverse MixColumns transformation table
+	//列混淆逆置换表
 	const uint8_t invMixCol[4][4] = {
 		{0x0e, 0x0b, 0x0d, 0x09},
 		{0x09, 0x0e, 0x0b, 0x0d},
 		{0x0d, 0x09, 0x0e, 0x0b},
 		{0x0b, 0x0d, 0x09, 0x0e}
 	};
-	//XOR with round key 
+	//生成roundKey的时候，跟roundKey异或用的表 
 	uint8_t RC[11] = { 0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36 };
-	//Key of each round
+	//用key生成的每轮加密用的密钥roundKey
 	uint8_t roundKey[11][4 * 4] = { 0x00 };
 
-	//Multiplication in GF(2^8)
+	//在GF(2^8)下的乘法
 	uint8_t multi(uint8_t a, uint8_t b);
-	//Multiplication of matrix, matrix a is m*p, matrix b is p*n, not used
+	//矩阵相乘，并没有使用到
 	void multiMatrix(uint8_t *a, uint8_t *b, uint8_t *result, int m, int p, int n);
-	//Replace bytes with S-box
+	//用S盒置换state（加密用）
 	void subBytes(vector<uint8_t>::iterator &state);
-	//Replace bytes with inverse S-box
+	//用逆S盒置换state（解密用）
 	void invSubBytes(vector<uint8_t>::iterator &state);
-	//Bytes shift
+	//行移位（加密用）
 	void shiftRows(vector<uint8_t>::iterator &state);
-	//Bytes inverse shift
+	//行逆移位（解密用）
 	void invShiftRows(vector<uint8_t>::iterator &state);
-	//Mix columns
+	//列混淆（加密用）
 	void mixColumns(vector<uint8_t>::iterator &state);
-	//Mix inverse columns
+	//列逆混淆（解密用）
 	void invMixColumns(vector<uint8_t>::iterator &state);
-	//State XOR round key
+	//state与每轮的roundKey异或
 	void addRoundKey(vector<uint8_t>::iterator &state, uint8_t *roundKey);
-	//Make round key
+	//生成roundKey
 	void keySchedule(const vector<uint8_t> &key);
+	//把一个state的内容打印出来
 	void show16(vector<uint8_t>::iterator &state);
-	//State encrypt
+	//一个state的加密
 	void encrypt16(vector<uint8_t>::iterator &state, const vector<uint8_t> &key);
-	//State decrypt
+	//一个state的解密
 	void decrypt16(vector<uint8_t>::iterator &state, const vector<uint8_t> &key);
 public:
 	AES();

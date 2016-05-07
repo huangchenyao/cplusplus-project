@@ -11,17 +11,17 @@
 
 ###base64  
 用C++实现的一个base64编码类，源代码在\Crypt\Crypt目录下的base64.h 和 base64.cpp  
-可以给其他加密方案进行编码解码  
+可以给其他加密方案进行编码解码
     输入输出参数均为string  
-    //base64编码
-    string encode(string &data);
-    //base64解码
-    string decode(string &base64Str);
+    //base64编码  
+    string encode(string &data);  
+    //base64解码  
+    string decode(string &base64Str);  
 
 ###MD5  
-用C++实现的一个MD5加密类，源代码在\Crypt\Crypt目录下的base64.h 和 base64.cpp  
+用C++实现的一个MD5加密类，源代码在\Crypt\Crypt目录下的base64.h 和 base64.cpp
     输入输出参数均为string  
-    //MD5加密
+    //MD5加密  
     string encrypt(string &message);  
 
 ###RSA  

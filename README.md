@@ -18,7 +18,7 @@
     string encode(string &data);  
     //base64解码  
     string decode(string &base64Str);  
-    
+
 
 ###MD5  
 用C++实现的一个MD5加密类，源代码在\Crypt\Crypt目录下的base64.h 和 base64.cpp  
@@ -26,7 +26,7 @@
     输入输出参数均为string  
     //MD5加密  
     string encrypt(string &message);  
-    
+
 
 ###RSA  
 还没写  

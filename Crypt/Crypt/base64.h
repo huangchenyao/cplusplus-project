@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <iostream>
-#include <vector>
+#include <string>
 using namespace std;
 class base64
 {
@@ -19,8 +19,8 @@ public:
 	base64();
 	~base64();
 	//base64±àÂë
-	vector<uint8_t> encode(vector<uint8_t> &data);
+	string encode(string &data);
 	//base64½âÂë
-	vector<uint8_t> decode(vector<uint8_t> &base64Str);
+	string decode(string &base64Str);
 };
 

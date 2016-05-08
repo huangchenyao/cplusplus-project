@@ -16,20 +16,20 @@ string base64::encode(string &data) {
 	int i = 0;
 	int length = data.length();
 	for (; length >= 3; length -= 3, i += 3) {
-		base64Str += encodeTable[data[i] >> 2];
-		base64Str += encodeTable[((data[i] & 0x03) << 4) | (data[i + 1] >> 4)];
-		base64Str += encodeTable[((data[i + 1] & 0x0f) << 2) | (data[i + 2] >> 6)];
+		base64Str += encodeTable[(data[i] >> 2) & 0x3f];
+		base64Str += encodeTable[((data[i] << 4) & 0x30) | ((data[i + 1] >> 4) & 0x0f)];
+		base64Str += encodeTable[((data[i + 1] << 2) & 0x3c) | ((data[i + 2] >> 6) & 0x03)];
 		base64Str += encodeTable[data[i + 2] & 0x3f];
 	}
 	if (2 == length) {
-		base64Str += encodeTable[data[i] >> 2];
-		base64Str += encodeTable[((data[i] & 0x03) << 4) | (data[i + 1] >> 4)];
-		base64Str += encodeTable[(data[i + 1] & 0x0f) << 2];
+		base64Str += encodeTable[(data[i] >> 2) & 0x3f];
+		base64Str += encodeTable[((data[i] << 4) & 0x30) | ((data[i + 1] >> 4) & 0x0f)];
+		base64Str += encodeTable[(data[i + 1] << 2) & 0x3c];
 		base64Str += '=';
 	}
 	if (1 == length) {
-		base64Str += encodeTable[data[i] >> 2];
-		base64Str += encodeTable[(data[i] & 0x03) << 4];
+		base64Str += encodeTable[(data[i] >> 2) & 0x3f];
+		base64Str += encodeTable[(data[i] << 4) & 0x30];
 		base64Str += '=';
 		base64Str += '=';
 	}

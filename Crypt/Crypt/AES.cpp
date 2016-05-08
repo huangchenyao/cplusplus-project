@@ -8,21 +8,60 @@ AES::~AES() {
 
 }
 
-void AES::encryptECB(vector<uint8_t> &content, int length, const vector<uint8_t> &key) {
+string AES::encryptECB(string &content, const string &key) {
+	//把content用0填充，直到长度为16bytes的倍数
+	int length = content.length();
 	if (length % 16 != 0) {
 		for (int i = length; i < length + 16 - length % 16; ++i) {
-			content.push_back(0x00);
+			content += (char)0x00;
 		}
 	}
-	for (auto iter = content.begin(); iter != content.end(); iter += 16) {
-		encrypt16(iter, key);
+	//把按行存储的密钥转化为按列存储的密钥并用于加密计算
+	vector<uint8_t> keyUse(16, 0);
+	for (int i = 0; i < key.size(); ++i) {
+		keyUse[i % 4 * 4 + i / 4] = key[i];
 	}
+	//把按行存储的明文转化为按列存储的明文并用于加密计算
+	vector<uint8_t> contentUse(content.length(), 0);
+	for (int i = 0; i < contentUse.size(); ++i) {
+		contentUse[i % 4 * 4 + i / 4] = content[i];
+	}
+	//每16bytes作为一个state进行加密
+	for (auto iter = contentUse.begin(); iter != contentUse.end(); iter += 16) {
+		encrypt16(iter, keyUse);
+	}
+	//把按列存储的密文转化为按行存储的密文
+	string result;
+	for (int i = 0; i < contentUse.size(); ++i) {
+		result += contentUse[i % 4 * 4 + i / 4];
+	}
+	//密文进行base64编码
+	return base64Crypt.encode(result);
 }
 
-void AES::decryptECB(vector<uint8_t> &content, int length, const vector<uint8_t> &key) {
-	for (auto iter = content.begin(); iter != content.end(); iter += 16) {
-		decrypt16(iter, key);
+string AES::decryptECB(string &content, const string &key) {
+	//密文进行base64解码
+	content = base64Crypt.decode(content);
+	//把按行存储的密钥转化为按列存储的密钥并用于解密计算
+	vector<uint8_t> keyUse(16, 0);
+	for (int i = 0; i < key.size(); ++i) {
+		keyUse[i % 4 * 4 + i / 4] = key[i];
 	}
+	//把按行存储的密文转化为按列存储的密文并用于解密计算
+	vector<uint8_t> contentUse(content.length(), 0);
+	for (int i = 0; i < contentUse.size(); ++i) {
+		contentUse[i % 4 * 4 + i / 4] = content[i];
+	}
+	//每16bytes作为一个state进行解密
+	for (auto iter = contentUse.begin(); iter != contentUse.end(); iter += 16) {
+		decrypt16(iter, keyUse);
+	}
+	//把按列存储的明文转化为按行存储的明文
+	string result;
+	for (int i = 0; i < contentUse.size(); ++i) {
+		result += contentUse[i % 4 * 4 + i / 4];
+	}
+	return result;
 }
 
 void AES::encryptCBC(uint8_t * content, int length, uint8_t * key, uint8_t * IV) {

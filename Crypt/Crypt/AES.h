@@ -5,11 +5,14 @@
 #include <iostream>
 #include <cstdint>
 #include <vector>
+#include <string>
+#include "base64.h"
 using namespace std;
 
 class AES
 {
 private:
+	base64 base64Crypt;
 	//S-box置换表
 	const uint8_t sBox[16][16] = {
 		// 0     1     2     3     4     5     6     7     8     9     a     b     c     d     e     f
@@ -100,8 +103,8 @@ public:
 	~AES();
 
 	//ECB模式（电子密码本模式：Electronic codebook）下的加解密
-	void encryptECB(vector<uint8_t> &content, int length, const vector<uint8_t> &key);
-	void decryptECB(vector<uint8_t> &content, int length, const vector<uint8_t> &key);
+	string encryptECB(string &content, const string &key);
+	string decryptECB(string &content, const string &key);
 	//CBC模式（密码分组链接：Cipher-block chaining）下的加解密
 	void encryptCBC(uint8_t *content, int length, uint8_t *key, uint8_t * IV);
 	void decryptCBC(uint8_t *content, int length, uint8_t *key);

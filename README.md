@@ -4,6 +4,7 @@
 ###AES  
 用C++实现的一个AES加密类，源代码在\Crypt\Crypt目录下的AES.h 和 AES.cpp，AES加密多个states有4种方案，分别为：  
 + ECB模式（电子密码本模式：Electronic codebook）已实现  
+
 	输入输出参数均为string  
 	string encryptECB(string &content, const string &key);  
 	string decryptECB(string &content, const string &key);  
